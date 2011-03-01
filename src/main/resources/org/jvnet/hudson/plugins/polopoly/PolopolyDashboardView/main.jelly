@@ -1,0 +1,23 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:local="local">
+
+  <!-- Tab bar -->
+  <d:taglib uri="local">
+    <d:tag name="viewTabs">
+      <l:tabBar>
+        <j:forEach var="v" items="${it.owner.views}">
+          <l:tab name="${v.viewName}" active="${v==it}" href="${rootURL}/${v.url}" />
+        </j:forEach>
+        <j:if test="${it.hasPermission(it.CREATE)}">
+          <l:tab name="+" href="${rootURL}/${it.owner.url}newView" active="false" />
+        </j:if>
+      </l:tabBar>
+    </d:tag>
+  </d:taglib>
+  <local:viewTabs/>
+
+  <h1>Dashboard</h1>
+  <j:set var="items" value="${it.getPolopolyItems()}"/>
+  <j:forEach var="item" items="${items}">
+    ${item.getVersion()} - ${item.getLatest().getLatestTestResult()}<br/>
+  </j:forEach>
+</j:jelly>
